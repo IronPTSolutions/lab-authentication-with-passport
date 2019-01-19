@@ -11,7 +11,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-envelope"></i></div>
                 </div>
-                <input type="email" name="email" class="form-control {{#if errors.email }} is-invalid {{/if}}" placeholder="Email">
+                <input type="email" name="email" class="form-control {{#if errors.email }} is-invalid {{/if}}" placeholder="Email" value="{{ user.email }}">
                 {{#if error.email}} <div class="invalid-feedback">{{errors.email}}</div>{{/if}}
             </div>
             <div class="input-group">
