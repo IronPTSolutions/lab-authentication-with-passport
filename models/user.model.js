@@ -24,7 +24,6 @@ schema.methods.checkPassword = function (password) {
 
 schema.pre('save', function (next) {
   const user = this;
-
   if (user.isModified('password')) {
     bcrypt.genSalt(WORK_FACTOR)
       .then(salt => {

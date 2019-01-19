@@ -1,5 +1,6 @@
 const User = require('../models/user.model');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 module.exports.login = (req, res, next) => {
   res.render('auth/login');
@@ -36,14 +37,13 @@ module.exports.doLogin = (req, res, next) => {
         }
     })(req, res, next);
   }
-}
+};
 
 module.exports.register = (req, res, next) => {
   res.render('auth/register');
 }
 
 module.exports.doRegister = (req, res, next) => {
-
   function renderWithErrors(user, errors) {
     res.render('auth/register', {
       user: user,
@@ -58,13 +58,13 @@ module.exports.doRegister = (req, res, next) => {
           email: 'Email is already registered'
         });
       } else {
-        console.log(req.body.email);
         user = new User({
           email: req.body.email,
           password: req.body.password
-        })
+        });
         return user.save()
           .then(user => {
+            console.log(user);
             res.redirect('/login');
           });
       }
