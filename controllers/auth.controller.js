@@ -1,5 +1,6 @@
 const User = require('../models/user.model');
 const mongoose = require('mongoose');
+const passport =  require('passport');
 
 module.exports.login = (req, res, next) => {
   res.render('auth/login');
