@@ -18,19 +18,28 @@ const schema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-schema.methods.checkPassword = function (password) {
-  return bcrypt.compare(password, this.password);
-}
 
-schema.pre('save', function (next) {
+schema.pre('save', function(next) {
   const user = this;
 
   if (user.isModified('password')) {
-    // TODO: hash password & save
+    bcrypt.genSalt(WORK_FACTOR)
+      .then(salt => {
+        return bcrypt.hash(user.password, salt)
+          .then(hash => {
+            user.password = hash;
+            next();
+          });
+      })
+      .catch(error => next(error));
   } else {
     next();
   }
 });
+
+schema.methods.checkPassword = function (password) {
+  return bcrypt.compare(password, this.password);
+}
 
 const User = mongoose.model('User', schema);
 module.exports = User;
