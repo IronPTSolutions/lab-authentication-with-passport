@@ -22,6 +22,14 @@ module.exports.doRegister = (req, res, next) => {
     });
   }
 
+  const { email, password } = req.body;
+  if (!email || !password) {
+    renderWithErrors(req.body, {
+      email: email ? undefined : 'Email is required',
+      password: password ? undefined : 'Password is required'
+    });
+  }(req, res, next);
+  
   User.findOne({ email: req.body.email })
     .then(user => {
       if (user) {
@@ -29,7 +37,6 @@ module.exports.doRegister = (req, res, next) => {
           email: 'Email is already registered'
         });
       } else {
-        console.log(req.body.email);
         user = new User({
           email: req.body.email,
           password: req.body.password
