@@ -31,6 +31,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'Dev secret',
   resave: true,
   saveUninitialized: true,
+  unset: 'destroy',
   cookie: {
     secure: process.env.SESSION_SECURE || false,
     httpOnly: true,
@@ -38,11 +39,16 @@ app.use(session({
   },
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
-    ttl: 24 * 60 * 60 * 1000 * 7
+    ttl: 24 * 60 * 60 * 7
   })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+  res.locals.session = req.user;
+  next();
+})
 
 app.use('/', authRouter);
 app.use('/', usersRouter);
