@@ -6,6 +6,7 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  {{#if session.id }}
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="/profile">Profile <span class="sr-only">(current)</span></a>
@@ -13,9 +14,18 @@
       <li class="nav-item">
         <a class="nav-link" href="/users">Users</a>
       </li>
-      
     </ul>
-
+    <ul class="navbar-nav my-2 my-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:void(0);">{{ session.email }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+    </ul>
+  {{else}}
+    <ul class="navbar-nav mr-auto">
+    </ul>
     <ul class="navbar-nav my-2 my-lg-0">
       <li class="nav-item">
         <a class="nav-link" href="/register">Register</a>
@@ -24,5 +34,6 @@
         <a class="nav-link" href="/login">Login</a>
       </li>
     </ul>
+  {{/if}}
   </div>
 </nav>
