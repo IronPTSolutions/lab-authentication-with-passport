@@ -11,13 +11,15 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-envelope"></i></div>
                 </div>
-                <input type="email" name="email" class="form-control" placeholder="Email">
+                <input type="email" name="email" class="form-control {{#if errors.email }} is-invalid {{/if}}" placeholder="Email" value="{{ user.email }}">
+                {{#if errors.email }} <div class="invalid-feedback">{{ errors.email }}</div> {{/if}}
             </div>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="fas fa-lock"></i></div>
                 </div>
-                <input type="password" name="password" class="form-control" placeholder="Password">
+                <input type="password" name="password" class="form-control {{#if errors.password }} is-invalid {{/if}}" placeholder="Password" value="{{ user.password }}">
+                {{#if errors.password }} <div class="invalid-feedback">{{ errors.password }}</div> {{/if}}
             </div>
         </div>
         <div class="form-actions">
