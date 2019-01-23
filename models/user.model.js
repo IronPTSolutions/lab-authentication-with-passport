@@ -13,7 +13,7 @@ const schema = new mongoose.Schema({
   },
   password: {
     type: String,
-    require: true,
+    require: [true, "password is required"], 
     minlength: [8, 'Needs at least 8 characters']
   }
 }, { timestamps: true });
@@ -24,9 +24,16 @@ schema.methods.checkPassword = function (password) {
 
 schema.pre('save', function (next) {
   const user = this;
-
   if (user.isModified('password')) {
-    // TODO: hash password & save
+    bcrypt.genSalt(WORK_FACTOR)
+      .then(salt => {
+        return bcrypt.hash(user.password, salt)
+          .then (hash => {
+            user.password = hash;
+            next();
+          });
+      })
+      .catch(err => next(error));
   } else {
     next();
   }

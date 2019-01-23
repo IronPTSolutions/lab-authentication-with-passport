@@ -16,5 +16,12 @@ module.exports.list = (req, res, next) => {
 }
 
 module.exports.delete = (req, res, next) => {
-  // TODO: delete user (needs logout if its the current user)
+
+  const userId = req.params.id;
+
+  User.findByIdAndDelete({_id: userId})
+    .then((user) => {
+      (user.id === req.user.id) ? res.redirect('/logout') : res.redirect('/users');
+    })
+    .catch(error => next(error));
 }

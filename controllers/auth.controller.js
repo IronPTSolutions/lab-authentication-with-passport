@@ -1,12 +1,46 @@
 const User = require('../models/user.model');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 module.exports.login = (req, res, next) => {
   res.render('auth/login');
 }
 
 module.exports.doLogin = (req, res, next) => {
-  // TODO: authenticate user
+
+  function renderWithErrors(user, errors) {
+    console.log("mail " + errors.email + "\n passs " + errors.password)
+    res.render('auth/login', {
+      user: user,
+      errors: errors
+    });
+  }
+
+  const email = req.body.email;
+  const password = req.body.password;
+  
+  if ((!email) || (!password)) {
+    renderWithErrors(req.body, {
+      email: email ? undefined : 'Email is required',
+      password: password ? undefined : 'Password is required',
+    });
+  } else {
+    passport.authenticate("local-auth", (error, user, validations) => {
+      if (error) {
+        next(error)
+      } else if (!user) {
+        renderWithErrors(req.body, validations)
+      } else {
+        req.login(user, (error) => {
+          if (error) {
+            next(error);
+          } else {
+            res.redirect("/profile");
+          }
+        })
+      }
+    })(req, res, next);
+  }
 }
 
 module.exports.register = (req, res, next) => {
@@ -16,6 +50,7 @@ module.exports.register = (req, res, next) => {
 module.exports.doRegister = (req, res, next) => {
 
   function renderWithErrors(user, errors) {
+    console.log("mail " + errors.email + "\n passs " + errors.password)
     res.render('auth/register', {
       user: user,
       errors: errors
@@ -29,7 +64,6 @@ module.exports.doRegister = (req, res, next) => {
           email: 'Email is already registered'
         });
       } else {
-        console.log(req.body.email);
         user = new User({
           email: req.body.email,
           password: req.body.password
@@ -50,9 +84,10 @@ module.exports.doRegister = (req, res, next) => {
 }
 
 module.exports.logout = (req, res, next) => {
-  // TODO: destroy session
+  req.logout();
+  res.redirect("/login");
 }
 
-module.exports.profile = (req, res, next) => {
-  res.render('auth/profile');
-}
+// module.exports.profile = (req, res, next) => {
+//   res.render('auth/profile');
+// }
