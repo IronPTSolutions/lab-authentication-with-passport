@@ -17,7 +17,7 @@
     </ul>
 
     <ul class="navbar-nav my-2 my-lg-0">
-      {{#if user}}
+      {{#if user.email }}
       <li class="nav-item nav-link">{{ user.email }}</li>
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
