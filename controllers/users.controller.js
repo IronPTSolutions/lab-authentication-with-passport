@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const User = require('../models/user.model');
 
 module.exports.profile = (req, res, next) => {
+  console.log(req.session);
   const user = req.user;
   res.render('users/profile', {
     user: user
